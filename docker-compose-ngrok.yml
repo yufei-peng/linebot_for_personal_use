@@ -1,0 +1,37 @@
+version: "3.9"
+services:
+
+  fake-gcs-service:
+    image: fsouza/fake-gcs-server
+    ports:
+      - "4443:4443"
+    restart: on-failure
+    volumes:
+      - ./example/data:/data
+    env_file:
+      - dev.env
+  fake-firestore-service:
+    image: mtlynch/firestore-emulator-docker
+    ports:
+      - "8080:8080"
+    restart: on-failure
+    env_file:
+      - dev.env
+  python-39:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app/
+    ports:
+      - "5000:5000"
+    depends_on:
+      - fake-gcs-service
+      - fake-firestore-service
+  ngrok :
+    image :  wernight/ngrok:latest
+    ports :
+      - "8888:4040"
+    environment :
+      NGROK_PROTOCOL :  tcp
+      NGROK_PORT :  python-39:5000
