@@ -20,6 +20,7 @@ class UserFirestoreDao:
         print(f"In dao add -> {user}")
 
         user_ref = cls.users_ref.document(user.line_user_id)
+        print(f"add_user_dao user_ref *** {user_ref}")
         # user_doc = user_ref.get()
 
         # if user_doc.exists:
@@ -30,7 +31,8 @@ class UserFirestoreDao:
         # To “upsert” a document (create if it doesn’t exist, replace completely if it does),
         # leave the merge argument at its default
         # https://googleapis.dev/python/firestore/latest/document.html
-        user_ref.set(user.to_dict())
+        result = user_ref.set(user.to_dict())
+        print(f"add_user_dao result *** {result}")
 
         return "OK"
 
