@@ -1,21 +1,24 @@
 from linebot import (
     LineBotApi
 )
-import logging
+from linebot.models import (
+    TextSendMessage
+)
 
-log = logging.getLogger(__name__)
+import os
+
 
 class LineBotController:
-    line_bot_api = LineBotApi(channel_access_token='')
+    line_bot_api = LineBotApi(channel_access_token=os.environ["LINE_CHANNEL_ACCESS_TOKEN"])
 
     @classmethod
     def follow_event(cls, event):
         print("---")
         print(event)
         print("***")
-        log.debug("%s", event)
 
-        # line_user_profile = cls.line_bot_api.get_profile(event.source.user_id)
+        line_user_profile = cls.line_bot_api.get_profile(event.source.user_id)
+        cls.line_bot_api.reply_message(event.reply_token, TextSendMessage("test"))
         # user_dict = {
         #     "line_user_id": line_user_profile.user_id,
         #     "line_user_pic_url": line_user_profile.picture_url,
