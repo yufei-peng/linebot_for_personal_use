@@ -23,18 +23,22 @@ class PictureFilesystemService:
     @classmethod
     def save_pic_to_filesystem(cls, message_event: MessageEvent):
 
-        image_id = message_event.message['id']
+        print(f"messageEvent is {message_event}")
+
+        image_id = message_event.message.id
 
         # 取得 linebot 的媒體內容
         # https://developers.line.biz/en/reference/messaging-api/#get-content
         message_content = cls.line_bot_api.get_message_content(message_id=image_id)
 
-        user_id = message_event.source['userId']
-        image_path = f'./images/{user_id}/{image_id}.png'
+        user_id = message_event.source.user_id
+        image_path = f'images/{user_id}/{image_id}.png'
 
         # 將檔案存到本地的檔案系統中
+        os.makedirs(os.path.dirname(image_path), exist_ok=True)
         with open(image_path, 'wb') as fwb:
-            fwb.write(message_content.content)
+            for chunk in message_content.iter_content():
+                fwb.write(chunk)
 
         # 將其路徑存到該使用者的資料庫檔案中
         user = UserFirestoreDao.get_user(user_id)

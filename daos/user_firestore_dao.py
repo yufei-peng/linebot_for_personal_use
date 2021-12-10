@@ -17,6 +17,8 @@ class UserFirestoreDao:
     @classmethod
     def add_user(cls, user: User):
 
+        print(f"In dao add -> {user}")
+
         user_ref = cls.users_ref.document(user.line_user_id)
         # user_doc = user_ref.get()
 
@@ -34,6 +36,8 @@ class UserFirestoreDao:
 
     @classmethod
     def update_user(cls, user: User):
+
+        print(f"In dao update -> {user}")
 
         line_user = cls.users_ref.document(user.line_user_id)
         line_user.update(user.to_dict())
