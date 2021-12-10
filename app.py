@@ -5,7 +5,7 @@ LINE 會將所有的 Event 送進 `/callback`
 確認 request 來自 LINE
 之後依照各個 Event 轉發
 """
-
+import os
 from flask import Flask, request, abort
 from flask_cors import CORS
 
@@ -20,8 +20,8 @@ from linebot.exceptions import (
 )
 from controllers.line_bot_controller import LineBotController
 
-line_bot_api = LineBotApi(channel_access_token='')
-handler = WebhookHandler(channel_secret='')
+line_bot_api = LineBotApi(channel_access_token=os.environ["LINE_CHANNEL_ACCESS_TOKEN"])
+handler = WebhookHandler(channel_secret=os.environ["LINE_CHANNEL_SECRET"])
 
 # 載入Follow事件
 from linebot.models.events import (
