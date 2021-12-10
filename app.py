@@ -19,6 +19,7 @@ from linebot.exceptions import (
     InvalidSignatureError
 )
 from controllers.line_bot_controller import LineBotController
+from controllers.user_controller import UserController
 
 line_bot_api = LineBotApi(channel_access_token=os.environ["LINE_CHANNEL_ACCESS_TOKEN"])
 handler = WebhookHandler(channel_secret=os.environ["LINE_CHANNEL_SECRET"])
@@ -58,6 +59,16 @@ def callback():
 @handler.add(FollowEvent)
 def handle_line_follow(event):
     return LineBotController.follow_event(event)
+
+
+@handler.add(MessageEvent, ImageMessage)
+def handle_image(event):
+    return LineBotController.handle_image_message(event)
+
+
+@app.route('/v1/pics/<user_id>', methods=['GET'])
+def get_user_images(user_id):
+    return UserController.get_user_images(user_id)
 
 
 if __name__ == '__main__':
