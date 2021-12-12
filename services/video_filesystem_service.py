@@ -45,10 +45,3 @@ class VideoFilesystemService:
 
         return "OK"
 
-    @classmethod
-    def get_video_link(cls, user_id) -> List[str]:
-
-        user = UserFirestoreDao.get_user(user_id)
-        result = user.video_files
-
-        return result

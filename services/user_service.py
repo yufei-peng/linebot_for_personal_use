@@ -1,4 +1,5 @@
 import os
+from typing import List
 
 from models.user import User
 from daos.user_firestore_dao import UserFirestoreDao
@@ -53,3 +54,19 @@ class UserService:
         user = UserFirestoreDao.get_user(user_id)
 
         return user
+
+    @classmethod
+    def get_images(cls, user_id: str) -> List[str]:
+
+        user = UserFirestoreDao.get_user(user_id)
+        user_images_files = user.image_files
+
+        return user_images_files
+
+    @classmethod
+    def get_videos(cls, user_id) -> List[str]:
+
+        user = UserFirestoreDao.get_user(user_id)
+        user_videos_files = user.video_files
+
+        return user_videos_files
