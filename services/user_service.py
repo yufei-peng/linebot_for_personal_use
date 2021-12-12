@@ -36,10 +36,10 @@ class UserService:
             line_user_nickname=user_profile.display_name,
             line_user_status=user_profile.status_message,
             line_user_system_language=user_profile.language,
-            message_files=[],
-            image_files=[],
-            audio_files=[],
-            video_files=[],
+            message_files=None,
+            image_files=None,
+            audio_files=None,
+            video_files=None,
             blocked=False
         )
         print(user)
