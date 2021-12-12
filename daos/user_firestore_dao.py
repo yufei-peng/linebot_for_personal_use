@@ -21,18 +21,24 @@ class UserFirestoreDao:
 
         user_ref = cls.users_ref.document(user.line_user_id)
         print(f"add_user_dao user_ref *** {user_ref}")
-        # user_doc = user_ref.get()
 
-        # if user_doc.exists:
-        #     user_ref.update(user.to_dict())
-        # else:
-        #     user_ref.set(user.to_dict())
+        user_doc = user_ref.get()
+        if user_doc.exists:
+            old_user_data = user_doc.to_dict()
+            user.message_files = old_user_data['message_files']
+            user.image_files = old_user_data['image_files']
+            user.audio_files = old_user_data['audio_files']
+            user.video_files = old_user_data['video_files']
+            print(f"In DAO, old user unfollow -> user={user}")
+            result = user_ref.update(user.to_dict())
+        else:
+            result = user_ref.set(user.to_dict())
 
         # To “upsert” a document (create if it doesn’t exist, replace completely if it does),
         # leave the merge argument at its default
         # https://googleapis.dev/python/firestore/latest/document.html
-        result = user_ref.set(user.to_dict())
-        print(f"add_user_dao result *** {result}")
+        # result = user_ref.set(user.to_dict())
+        # print(f"add_user_dao result *** {result}")
 
         return "OK"
 
