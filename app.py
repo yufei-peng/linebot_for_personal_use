@@ -66,9 +66,19 @@ def handle_image(event):
     return LineBotController.handle_image_message(event)
 
 
+@handler.add(MessageEvent, VideoMessage)
+def handle_video(event):
+    return LineBotController.handle_video_message(event)
+
+
 @app.route('/v1/pics/<user_id>', methods=['GET'])
 def get_user_images(user_id):
     return UserController.get_user_images(user_id)
+
+
+@app.route('/v1/videos/<user_id>', methods=['GET'])
+def get_user_videos(user_id):
+    return UserController.get_user_videos(user_id)
 
 
 if __name__ == '__main__':
