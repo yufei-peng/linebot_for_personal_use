@@ -1,5 +1,4 @@
 import os
-from typing import List
 
 from daos.user_firestore_dao import UserFirestoreDao
 
@@ -44,4 +43,3 @@ class VideoFilesystemService:
         UserFirestoreDao.update_user(user)
 
         return "OK"
-

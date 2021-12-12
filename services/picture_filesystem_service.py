@@ -1,5 +1,4 @@
 import os
-from typing import List
 
 from daos.user_firestore_dao import UserFirestoreDao
 
@@ -51,11 +50,3 @@ class PictureFilesystemService:
         UserFirestoreDao.update_user(user)
 
         return "OK"
-
-    @classmethod
-    def get_pic_from_filesystem(cls, user_id: str) -> List[str]:
-
-        user = UserFirestoreDao.get_user(user_id)
-        user_image_files = user.image_files
-
-        return user_image_files
