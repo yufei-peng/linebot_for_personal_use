@@ -6,4 +6,5 @@ venv
 
 backend.env
 images/
+videos/
 test-line-bot-334716-d437933abc56.json
