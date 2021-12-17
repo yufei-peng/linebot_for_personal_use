@@ -3,6 +3,7 @@ import os
 from services.picture_filesystem_service import PictureFilesystemService
 from services.video_filesystem_service import VideoFilesystemService
 from services.user_service import UserService
+from services.picture_cloudstorage_service import PictureCloudstorageService
 
 from linebot import (
     LineBotApi
@@ -25,7 +26,7 @@ class LineBotController:
     @classmethod
     def handle_image_message(cls, event: MessageEvent):
 
-        result = PictureFilesystemService.save_pic_to_filesystem(event)
+        result = PictureCloudstorageService.save_picture_to_cloudstorage(event)
 
         return "Your Image has benn saved to database. Thank you!"
 
