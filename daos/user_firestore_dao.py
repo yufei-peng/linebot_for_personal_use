@@ -1,4 +1,9 @@
-from models.user import User
+from importlib import import_module
+import config
+
+USERMODEL = getattr(import_module('models.user'), str(config.MODEL))
+
+print(f"in dao, usermodel = {USERMODEL}")
 
 from google.cloud import firestore
 
@@ -15,7 +20,7 @@ class UserFirestoreDao:
     # 使用者可能會重複 follow 、 unfollow ，兩者之間重複操作
     # 所以就算是 follow ，也有可能是舊的使用者
     @classmethod
-    def add_user(cls, user: User):
+    def add_user(cls, user: USERMODEL):
 
         print(f"In dao add -> {user}")
 
@@ -43,7 +48,7 @@ class UserFirestoreDao:
         return "OK"
 
     @classmethod
-    def update_user(cls, user: User):
+    def update_user(cls, user: USERMODEL):
 
         print(f"In dao update -> {user}")
 
@@ -53,10 +58,12 @@ class UserFirestoreDao:
         return "OK"
 
     @classmethod
-    def get_user(cls, user_id: str) -> User:
+    def get_user(cls, user_id: str) -> USERMODEL:
 
         user_doc = cls.users_ref.document(user_id).get()
+        # print(f"in dao, user_doc = {user_doc.to_dict()}")
         if user_doc.exists:
-            return User.from_dict(user_doc.to_dict())
+            return USERMODEL.from_dict(user_doc.to_dict())
         else:
+            # print("??????????")
             pass
