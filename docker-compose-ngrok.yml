@@ -1,15 +1,21 @@
 version: "3.9"
 services:
 
-  fake-gcs-service:
-    image: fsouza/fake-gcs-server
+#  fake-gcs-service:
+#    image: fsouza/fake-gcs-server
+#    ports:
+#      - "4443:4443"
+#    restart: on-failure
+#    volumes:
+#      - ./example/data:/data
+#    env_file:
+#      - dev.env
+  gcp-storage-emulator:
+    image: oittaa/gcp-storage-emulator
     ports:
-      - "4443:4443"
-    restart: on-failure
+      - "4443:8080"
     volumes:
-      - ./example/data:/data
-    env_file:
-      - dev.env
+      - ./cloudstorage:/storage
 
   fake-firestore-service:
     image: mtlynch/firestore-emulator-docker
@@ -28,7 +34,7 @@ services:
     ports:
       - "5000:5000"
     depends_on:
-      - fake-gcs-service
+      - gcp-storage-emulator
       - fake-firestore-service
     env_file:
       - backend.env

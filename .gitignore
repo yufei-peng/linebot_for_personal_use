@@ -5,3 +5,8 @@ venv
 .DS_Store
 
 backend.env
+images/
+videos/
+example/
+cloudstorage/
+test-line-bot-334716-d437933abc56.json
