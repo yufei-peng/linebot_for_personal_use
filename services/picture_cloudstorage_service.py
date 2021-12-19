@@ -4,10 +4,7 @@ import urllib3
 
 from linebot import LineBotApi
 from google.cloud import storage
-from google.api_core.client_options import ClientOptions
 from google.auth.credentials import AnonymousCredentials
-from gcp_storage_emulator.server import create_server
-from google.cloud import exceptions
 
 from daos.user_firestore_dao import UserFirestoreDao
 
@@ -57,43 +54,28 @@ class PictureCloudstorageService:
                 fwb.write(chunk)
 
         # link to oittaa/gcp-storage-emulator
-        BUCKET = "test-bucket"
-
         client = storage.Client(
             credentials=AnonymousCredentials(),
             project="test",
         )
 
-        bucket = client.bucket(BUCKET)
-        bucket = client.create_bucket(bucket)
-        print(f"bucket = {bucket}")
-        blob = bucket.blob("blob1")
-        blob.upload_from_string("test1")
-        blob = bucket.blob("blob2")
-        blob.upload_from_string("test2")
-        for blob in bucket.list_blobs():
-            content = blob.download_as_bytes()
-            print("Blob [{}]: {}".format(blob.name, content))
-
-        # bucket_name = "test-bucket"
-        # destination_blob_name = f"{image_id}.png"
-        # bucket = client.bucket(BUCKET)
-        # print(f"bucket={bucket}")
-        # blob = bucket.blob(destination_blob_name)
-        # print(f"blob={blob}")
-        # # blob.upload_from_string("test1")
-        # blob.upload_from_filename(temp_path)
-
+        bucket_name = "test-bucket"
+        destination_blob_name = f"images/{user_id}/{image_id}.png"
+        bucket = client.bucket(bucket_name)
+        print(f"bucket={bucket}")
+        blob = bucket.blob(destination_blob_name)
+        print(f"blob={blob}")
+        blob.upload_from_string("upload-user-image")
 
         # 移除本地暫存檔
         os.remove(temp_path)
 
-        # user = UserFirestoreDao.get_user(user_id)
-        # if user.image_files is None:
-        #     user.image_files = []
-        #     user.image_files.append(destination_blob_name)
-        # else:
-        #     user.image_files.append(destination_blob_name)
-        # UserFirestoreDao.update_user(user)
+        user = UserFirestoreDao.get_user(user_id)
+        if user.image_files is None:
+            user.image_files = []
+            user.image_files.append(destination_blob_name)
+        else:
+            user.image_files.append(destination_blob_name)
+        UserFirestoreDao.update_user(user)
 
         return "OK"
