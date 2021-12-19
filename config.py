@@ -20,10 +20,10 @@ MESSAGESERVICE: str = 'MessageCloudstorageService'
 
 
 ''' 選擇 照片 要使用的 存檔地點
-    ImageCloudstorageService
-    ImageFilesystemService
+    PictureCloudstorageService
+    PictureFilesystemService
 '''
-IMAGESERVICE: str = 'ImageCloudstorageService'
+IMAGESERVICE: str = 'PictureCloudstorageService'
 
 
 ''' 選擇 語音檔案 要使用的 存檔地點
