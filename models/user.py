@@ -1,30 +1,56 @@
 from __future__ import annotations
 
 """
-User 的實體
+使用 abstract factory 實作 User 實體
+User class 為 abstrct class
+FirebaseUser 為 concrete class, 提供 firebase 使用的 Model
+MysqlUser 為 concrete class, 提供 mysql 使用的 Model
+
 提供 from_dict 和 to_dict 方便快速轉換
 提供 __repr__ 打印參數
 """
 class User(object):
 
     def __init__(self, line_user_id, line_user_pic_url,  line_user_nickname, line_user_status,
-                 line_user_system_language, blocked=False):
+                 line_user_system_language, message_files, image_files, audio_files,
+                 video_files, blocked=False):
 
         self.line_user_id = line_user_id
         self.line_user_pic_url = line_user_pic_url
         self.line_user_nickname = line_user_nickname
         self.line_user_status = line_user_status
         self.line_user_system_language = line_user_system_language
+        self.message_files = message_files
+        self.image_files = image_files
+        self.audio_files = audio_files
+        self.video_files = video_files
         self.blocked = blocked
 
     @staticmethod
     def from_dict(user: dict) -> User:
-        user = User(
+        raise NotImplementedError
+
+    def to_dict(self):
+        raise NotImplementedError
+
+    def __repr__(self) -> str:
+        raise NotImplementedError
+
+
+class FirebaseUser(User):
+
+    @staticmethod
+    def from_dict(user: dict) -> FirebaseUser:
+        user = FirebaseUser(
             line_user_id=user.get(u'line_user_id'),
             line_user_pic_url=user.get(u'line_user_pic_url'),
             line_user_nickname=user.get(u'line_user_nickname'),
             line_user_status=user.get(u'line_user_status'),
             line_user_system_language=user.get(u'line_user_system_language'),
+            message_files=user.get(u'message_files'),
+            image_files=user.get(u'image_files'),
+            audio_files=user.get(u'audio_files'),
+            video_files=user.get(u'video_files'),
             blocked=user.get(u'blocked')
         )
         return user
@@ -36,16 +62,24 @@ class User(object):
             "line_user_nickname": self.line_user_nickname,
             "line_user_status": self.line_user_status,
             "line_user_system_language": self.line_user_system_language,
+            "message_files": self.message_files,
+            "image_files": self.image_files,
+            "audio_files": self.audio_files,
+            "video_files": self.video_files,
             "blocked": self.blocked
         }
         return user_dict
 
     def __repr__(self):
         return (f'''User(
-            line_user_id={self.line_user_id},
-            line_user_pic_url={self.line_user_pic_url},
-            line_user_nickname={self.line_user_nickname},
-            line_user_status={self.line_user_status},
-            line_user_system_language={self.line_user_system_language},
-            blocked={self.blocked}
-        )''')
+                line_user_id={self.line_user_id},
+                line_user_pic_url={self.line_user_pic_url},
+                line_user_nickname={self.line_user_nickname},
+                line_user_status={self.line_user_status},
+                line_user_system_language={self.line_user_system_language},
+                message_files={self.message_files},
+                image_files={self.image_files},
+                audio_files={self.audio_files},
+                video_files={self.video_files},
+                blocked={self.blocked}
+            )''')
