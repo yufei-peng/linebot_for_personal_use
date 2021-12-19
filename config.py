@@ -37,4 +37,4 @@ AUDIOSERVICE: str = 'AudioCloudstorageService'
     VideoCloudstorageService
     VideoFilesystemService
 '''
-VIDEOSERVICE: str = 'VideoCloudstorageService'
+VIDEOSERVICE: str = 'VideoFilesystemService'
