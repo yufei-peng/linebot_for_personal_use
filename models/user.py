@@ -1,7 +1,11 @@
 from __future__ import annotations
 
 """
-User 的實體
+使用 abstract factory 實作 User 實體
+User class 為 abstrct class
+FirebaseUser 為 concrete class, 提供 firebase 使用的 Model
+MysqlUser 為 concrete class, 提供 mysql 使用的 Model
+
 提供 from_dict 和 to_dict 方便快速轉換
 提供 __repr__ 打印參數
 """
