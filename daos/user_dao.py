@@ -8,10 +8,30 @@ print(f"in dao, usermodel = {USERMODEL}")
 from google.cloud import firestore
 
 '''
-User 對 Firestore 的操作
+使用 abstract factory 實作 UserDao
+UserDao class 為 abstrct class
+UserFirestoreDao 為 concrete class, 提供對 Firestore 資料庫的操作
+UserMysqlDao 為 concrete class, 提供對 Mysql 資料庫的操作
+
+User 對 資料庫 的操作
 提供 新增、更新、查詢 功能
 '''
-class UserFirestoreDao:
+class UserDao:
+
+    @classmethod
+    def add_user(cls, user: USERMODEL):
+        raise NotImplementedError
+
+    @classmethod
+    def update_user(cls, user: USERMODEL):
+        raise NotImplementedError
+
+    @classmethod
+    def get_user(cls, user_id: str) -> USERMODEL:
+        raise NotImplementedError
+
+
+class UserFirestoreDao(UserDao):
 
     db = firestore.Client()
     users_ref = db.collection(u'users')
