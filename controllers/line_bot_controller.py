@@ -1,9 +1,12 @@
 import os
 
-from services.picture_filesystem_service import PictureFilesystemService
-from services.video_filesystem_service import VideoFilesystemService
 from services.user_service import UserService
-from services.picture_cloudstorage_service import PictureCloudstorageService
+from importlib import import_module
+import config
+
+IMAGESERVICE = getattr(import_module('services.image_service'), str(config.IMAGESERVICE))
+VIDEOSERVICE = getattr(import_module('services.video_service'), str(config.VIDEOSERVICE))
+print(f"in line bot controller, image service = {IMAGESERVICE}, and video service = {VIDEOSERVICE}")
 
 from linebot import (
     LineBotApi
@@ -26,13 +29,13 @@ class LineBotController:
     @classmethod
     def handle_image_message(cls, event: MessageEvent):
 
-        result = PictureCloudstorageService.save_picture_to_cloudstorage(event)
+        result = IMAGESERVICE.save_picture(event)
 
         return "Your Image has benn saved to database. Thank you!"
 
     @classmethod
     def handle_video_message(cls, event: MessageEvent):
 
-        result = VideoFilesystemService.save_video_to_filesystem(event)
+        result = VIDEOSERVICE.save_video(event)
 
         return "Your Video has benn saved to database. Thank you!"
