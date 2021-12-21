@@ -8,8 +8,8 @@ from models.user import User
 
 #USERMODEL = getattr(import_module('models.user'), str(config.MODEL))
 #print(f"in user service, usermodel = {USERMODEL}")
-USERDAO = getattr(import_module('daos.user_dao'), str(config.USERDAO))
-print(f"in user service, userdao = {USERDAO}")
+USER_DAO = getattr(import_module('daos.' + config.USER_DAO_PKG), str(config.USER_DAO))
+print(f"in user service, userdao = {USER_DAO}")
 
 from linebot import LineBotApi
 from linebot.exceptions import LineBotApiError
@@ -51,21 +51,21 @@ class UserService:
             blocked=False
         )
         print(user)
-        USERDAO.add_user(user)
+        USER_DAO.add_user(user)
 
         pass
 
     @classmethod
     def get_user(cls, user_id: str) -> User:
 
-        user = USERDAO.get_user(user_id)
+        user = USER_DAO.get_user(user_id)
 
         return user
 
     @classmethod
     def get_images(cls, user_id: str) -> List[str]:
 
-        user = USERDAO.get_user(user_id)
+        user = USER_DAO.get_user(user_id)
         user_images_files = user.image_files
 
         return user_images_files
@@ -73,7 +73,7 @@ class UserService:
     @classmethod
     def get_videos(cls, user_id) -> List[str]:
 
-        user = USERDAO.get_user(user_id)
+        user = USER_DAO.get_user(user_id)
         user_videos_files = user.video_files
 
         return user_videos_files

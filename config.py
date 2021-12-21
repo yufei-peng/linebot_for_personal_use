@@ -1,40 +1,59 @@
-''' 選擇要使用的 user model，必須搭配 dao 使用
-    FirebaseUser -> FirebaseDao 使用
-    MysqlUser -> MysqlDao 使用
-'''
-MODEL: str = 'FirebaseUser'
-
-
 ''' 選擇要使用的 資料庫
-    UserFirestoreDao
-    UserMysqlDao
+    package:
+        user_firestore_dao
+        user_mysql_dao
+    class:
+        UserFirestoreDao
+        UserMysqlDao
 '''
-#USERDAO: str = 'UserFirestoreDao'
-USERDAO: str = 'UserMySQLDao'
+# USER_DAO_PKG: str = 'user_firestore_dao'
+# USER_DAO: str = 'UserFirestoreDao'
+USER_DAO: str = 'UserMySQLDao'
+USER_DAO_PKG: str = 'user_mysql_dao'
 
 ''' 選擇 文字訊息 要使用的 存檔地點
-    MessageCloudstorageService
-    MessageFilesystemService
+    package:
+        message_cloudstorage_service
+        message_filesystem_service
+    class:
+        MessageCloudstorageService
+        MessageFilesystemService
 '''
-MESSAGESERVICE: str = 'MessageCloudstorageService'
+MESSAGE_SERVICE_PKG: str = 'message_cloudstorage_service'
+MESSAGE_SERVICE: str = 'MessageCloudstorageService'
 
 
 ''' 選擇 照片 要使用的 存檔地點
-    PictureCloudstorageService
-    PictureFilesystemService
+    package:
+        image_cloudstorage_service
+        image_filesystem_service
+    class:
+        PictureCloudstorageService
+        PictureFilesystemService
 '''
-IMAGESERVICE: str = 'PictureCloudstorageService'
+IMAGE_SERVICE_PKG: str = 'image_cloudstorage_service'
+IMAGE_SERVICE: str = 'PictureCloudstorageService'
 
 
 ''' 選擇 語音檔案 要使用的 存檔地點
-    AudioCloudstorageService
-    AudioFilesystemService
+    package:
+        audio_cloudstorage_service
+        audio__filesystem_service
+    class:
+        AudioCloudstorageService
+        AudioFilesystemService
 '''
-AUDIOSERVICE: str = 'AudioCloudstorageService'
+AUDIO_SERVICE_PKG: str = 'audio_cloudstorage_service'
+AUDIO_SERVICE: str = 'AudioCloudstorageService'
 
 
 ''' 選擇 影片檔案 要使用的 存檔地點
-    VideoCloudstorageService
-    VideoFilesystemService
+    package:
+        video_cloudstorage_service
+        video_filesystem_service
+    class:
+        VideoCloudstorageService
+        VideoFilesystemService
 '''
-VIDEOSERVICE: str = 'VideoFilesystemService'
+VIDEO_SERVICE_PKG: str = 'video_filesystem_service'
+VIDEO_SERVICE: str = 'VideoFilesystemService'
