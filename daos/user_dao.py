@@ -1,9 +1,10 @@
 from importlib import import_module
 import config
+import pymysql
 
-USERMODEL = getattr(import_module('models.user'), str(config.MODEL))
-
-print(f"in dao, usermodel = {USERMODEL}")
+#USERMODEL = getattr(import_module('models.user'), str(config.MODEL))
+from models.user import User
+#print(f"in dao, usermodel = {USERMODEL}")
 
 from google.cloud import firestore
 
@@ -19,15 +20,15 @@ User 對 資料庫 的操作
 class UserDao:
 
     @classmethod
-    def add_user(cls, user: USERMODEL):
+    def add_user(cls, user: User):
         raise NotImplementedError
 
     @classmethod
-    def update_user(cls, user: USERMODEL):
+    def update_user(cls, user: User):
         raise NotImplementedError
 
     @classmethod
-    def get_user(cls, user_id: str) -> USERMODEL:
+    def get_user(cls, user_id: str) -> User:
         raise NotImplementedError
 
 
@@ -40,7 +41,7 @@ class UserFirestoreDao(UserDao):
     # 使用者可能會重複 follow 、 unfollow ，兩者之間重複操作
     # 所以就算是 follow ，也有可能是舊的使用者
     @classmethod
-    def add_user(cls, user: USERMODEL):
+    def add_user(cls, user: User):
 
         print(f"In dao add -> {user}")
 
@@ -68,7 +69,7 @@ class UserFirestoreDao(UserDao):
         return "OK"
 
     @classmethod
-    def update_user(cls, user: USERMODEL):
+    def update_user(cls, user: User):
 
         print(f"In dao update -> {user}")
 
@@ -78,12 +79,88 @@ class UserFirestoreDao(UserDao):
         return "OK"
 
     @classmethod
-    def get_user(cls, user_id: str) -> USERMODEL:
+    def get_user(cls, user_id: str) -> User:
 
         user_doc = cls.users_ref.document(user_id).get()
         # print(f"in dao, user_doc = {user_doc.to_dict()}")
         if user_doc.exists:
-            return USERMODEL.from_dict(user_doc.to_dict())
+            return User.from_dict(user_doc.to_dict())
         else:
             # print("??????????")
             pass
+
+
+class UserMySQLDao(UserDao):
+    """
+    實作 User 對於 MySQL 資料庫的 DAO 類
+    """
+    db = pymysql.connect(host='mysql', user='root', password='rootdevpassword', db='demo', charset='utf8mb4',
+                         cursorclass=pymysql.cursors.DictCursor)
+
+    schema = """
+    CREATE TABLE User (
+    line_user_id VARCHAR(255) NOT NULL UNIQUE,
+    line_user_pic_url VARCHAR(255),
+    line_user_nickname VARCHAR(255),
+    line_user_status VARCHAR(255),
+    line_user_system_language VARCHAR(255),
+    message_files VARCHAR(255),
+    image_files VARCHAR(255),
+    audio_files VARCHAR(255),
+    video_files VARCHAR(255),
+    blocked VARCHAR(30) NOT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    """
+
+    # Table 初始化
+    try:
+        with db.cursor() as cursor:
+            cursor.execute(schema)
+        print("Create User table")
+    except pymysql.Error as e:
+        print("Table has been created , error_message -> " + str(e))
+
+    # Check db connection
+    db.ping(reconnect=True)
+    cursor = db.cursor()
+
+    @classmethod
+    def add_user(cls, user: User):
+        sql = f"""
+        INSERT INTO User (line_user_id, line_user_pic_url, line_user_nickname, line_user_status, line_user_system_language, message_files, image_files, audio_files, video_files, blocked)
+        VALUE ('{user.line_user_id}','{user.line_user_pic_url}','{user.line_user_nickname}','{user.line_user_status}','{user.line_user_system_language}','{user.message_files}','{user.image_files}',
+        '{user.audio_files}','{user.video_files}','{user.blocked}')
+        """
+        try:
+            cls.cursor.execute(sql)
+            cls.db.commit()
+            return 'OK'
+        except pymysql.Error as err:
+            print("SQL executed error: " + str(err))
+
+    @classmethod
+    def update_user(cls, user: User):
+        sql = f"""
+        UPDATE User SET 
+        line_user_pic_url = '{user.line_user_pic_url}' , line_user_nickname = '{user.line_user_pic_url}' , line_user_status = '{user.line_user_status}',
+        line_user_system_language = '{user.line_user_system_language}', message_files = '{user.message_files}' , image_files = '{user.image_files}',
+        audio_files = '{user.audio_files}', video_files = '{user.video_files}' WHERE line_user_id = '{user.line_user_id}'
+        """
+        try:
+            cls.cursor.execute(sql)
+            cls.db.commit()
+            return 'OK'
+        except pymysql.Error as err:
+            print("SQL executed error: " + str(err))
+
+    @classmethod
+    def get_user(cls, user_id: str) -> User:
+        sql = f"""
+        SELECT * FROM User WHERE line_user_id = '{user_id}'
+        """
+        try:
+            user_dict = cls.cursor.execute(sql)
+            user = User.from_dict(user_dict)
+            return user
+        except pymysql.Error as err:
+            print("SQL executed error: " + str(err))

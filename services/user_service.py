@@ -4,8 +4,10 @@ from typing import List
 from importlib import import_module
 import config
 
-USERMODEL = getattr(import_module('models.user'), str(config.MODEL))
-print(f"in user service, usermodel = {USERMODEL}")
+from models.user import User
+
+#USERMODEL = getattr(import_module('models.user'), str(config.MODEL))
+#print(f"in user service, usermodel = {USERMODEL}")
 USERDAO = getattr(import_module('daos.user_dao'), str(config.USERDAO))
 print(f"in user service, userdao = {USERDAO}")
 
@@ -36,7 +38,7 @@ class UserService:
 
         # TODO: line_user_pic_url 待處理，先暫時存 line 給的 url
 
-        user = USERMODEL(
+        user = User(
             line_user_id=user_profile.user_id,
             line_user_pic_url=user_profile.picture_url,
             line_user_nickname=user_profile.display_name,
@@ -54,7 +56,7 @@ class UserService:
         pass
 
     @classmethod
-    def get_user(cls, user_id: str) -> USERMODEL:
+    def get_user(cls, user_id: str) -> User:
 
         user = USERDAO.get_user(user_id)
 
