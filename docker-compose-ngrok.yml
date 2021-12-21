@@ -10,6 +10,13 @@ services:
 #      - ./example/data:/data
 #    env_file:
 #      - dev.env
+  gcp-storage-emulator:
+    image: oittaa/gcp-storage-emulator
+    ports:
+      - "4443:8080"
+    volumes:
+      - ./cloudstorage:/storage
+
   mysql:
     image: mysql:5.7
     ports:
