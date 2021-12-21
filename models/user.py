@@ -1,11 +1,7 @@
 from __future__ import annotations
 
 """
-使用 abstract factory 實作 User 實體
-User class 為 abstrct class
-FirebaseUser 為 concrete class, 提供 firebase 使用的 Model
-MysqlUser 為 concrete class, 提供 mysql 使用的 Model
-
+User 的實體
 提供 from_dict 和 to_dict 方便快速轉換
 提供 __repr__ 打印參數
 """
@@ -28,20 +24,7 @@ class User(object):
 
     @staticmethod
     def from_dict(user: dict) -> User:
-        raise NotImplementedError
-
-    def to_dict(self):
-        raise NotImplementedError
-
-    def __repr__(self) -> str:
-        raise NotImplementedError
-
-
-class FirebaseUser(User):
-
-    @staticmethod
-    def from_dict(user: dict) -> FirebaseUser:
-        user = FirebaseUser(
+        user = User(
             line_user_id=user.get(u'line_user_id'),
             line_user_pic_url=user.get(u'line_user_pic_url'),
             line_user_nickname=user.get(u'line_user_nickname'),
@@ -72,14 +55,14 @@ class FirebaseUser(User):
 
     def __repr__(self):
         return (f'''User(
-                line_user_id={self.line_user_id},
-                line_user_pic_url={self.line_user_pic_url},
-                line_user_nickname={self.line_user_nickname},
-                line_user_status={self.line_user_status},
-                line_user_system_language={self.line_user_system_language},
-                message_files={self.message_files},
-                image_files={self.image_files},
-                audio_files={self.audio_files},
-                video_files={self.video_files},
-                blocked={self.blocked}
-            )''')
+            line_user_id={self.line_user_id},
+            line_user_pic_url={self.line_user_pic_url},
+            line_user_nickname={self.line_user_nickname},
+            line_user_status={self.line_user_status},
+            line_user_system_language={self.line_user_system_language},
+            message_files={self.message_files},
+            image_files={self.image_files},
+            audio_files={self.audio_files},
+            video_files={self.video_files},
+            blocked={self.blocked}
+        )''')

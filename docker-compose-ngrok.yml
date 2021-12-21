@@ -10,12 +10,12 @@ services:
 #      - ./example/data:/data
 #    env_file:
 #      - dev.env
-  gcp-storage-emulator:
-    image: oittaa/gcp-storage-emulator
+  mysql:
+    image: mysql:5.7
     ports:
-      - "4443:8080"
-    volumes:
-      - ./cloudstorage:/storage
+      - "3306:3306"
+    env_file:
+      - dev.env
 
   fake-firestore-service:
     image: mtlynch/firestore-emulator-docker
@@ -33,9 +33,6 @@ services:
       - ./:/app/
     ports:
       - "5000:5000"
-    depends_on:
-      - gcp-storage-emulator
-      - fake-firestore-service
     env_file:
       - backend.env
 

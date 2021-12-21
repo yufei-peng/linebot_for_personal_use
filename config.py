@@ -9,8 +9,8 @@ MODEL: str = 'FirebaseUser'
     UserFirestoreDao
     UserMysqlDao
 '''
-USERDAO: str = 'UserFirestoreDao'
-
+#USERDAO: str = 'UserFirestoreDao'
+USERDAO: str = 'UserMySQLDao'
 
 ''' 選擇 文字訊息 要使用的 存檔地點
     MessageCloudstorageService
